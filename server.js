@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (res) => {
+  console.log("in get");
   res.send("isAlive");
 });
 
