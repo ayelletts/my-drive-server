@@ -17,4 +17,6 @@ app.get("/", (res) => {
 
 app.use("/files", filesRouter);
 
-app.listen(port, () => console.log(`*** app listening on port ${port}! ***`));
+app.listen(process.env.PORT || port, () =>
+  console.log(`*** app listening on port ${port}! ***`)
+);
