@@ -10,9 +10,9 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get("/", (res) => {
+app.get("/", (req, res) => {
   console.log("in get");
-  res.send("isAlive");
+  res.status(200).send("isAlive");
 });
 
 app.use("/files", filesRouter);
