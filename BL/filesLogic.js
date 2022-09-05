@@ -41,10 +41,14 @@ exports.createFolder = (folderName) => {
   filesController.createFolder(folderName);
 };
 
-exports.rename = (oldName, newName) => {
-  // console.log("filesLogic rename");
-
-  filesController.rename(oldName, newName);
+exports.rename = async (oldName, newName) => {
+  // console.log("filesLogic rename", oldName, newName);
+  try {
+    await filesController.rename(oldName, newName);
+  } catch (err) {
+    // console.log("++++++++++++++++ err", err);
+    throw err;
+  }
 };
 
 exports.deleteFolder = (folderName) => {

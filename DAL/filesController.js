@@ -3,6 +3,23 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https"); // or 'https' for https:// URLs
 
+function download(req, res) {
+  try {
+    let pathParts = req.body.filename.split("/");
+    const fileName = pathParts[pathParts.length - 1];
+    const fileURL = req.body.filename;
+    const stream = fs.createReadStream(fileURL);
+    res.set({
+      "Content-Disposition": `attachment; filename='${fileName}'`,
+      "Content-Type": "application/pdf",
+    });
+    stream.pipe(res);
+  } catch (e) {
+    console.error(e);
+    res.status(500).end();
+  }
+}
+
 function downloadFile(filename) {
   console.log("controller downloadFile", filename);
   let ext = filename.slice(filename.lastIndexOf(".") + 1);
@@ -130,7 +147,7 @@ function createFolder(folder) {
   }
 }
 
-function rename(oldName, newName) {
+async function rename(oldName, newName) {
   // console.log("controller rename", oldName, newName);
   try {
     if (!isExist(oldName))
@@ -139,8 +156,11 @@ function rename(oldName, newName) {
       throw { status: 500, message: "destination folder already exist" };
     fs.renameSync(oldName, newName);
   } catch (error) {
-    // console.log(error);
-    throw error;
+    // console.log("************************************", error);
+    throw {
+      status: 502,
+      message: "Rename not permitted, please check permissions",
+    };
   }
 }
 
@@ -187,5 +207,5 @@ module.exports = {
   createFolder,
   rename,
   deleteFolder,
-  downloadFile,
+  download,
 };
